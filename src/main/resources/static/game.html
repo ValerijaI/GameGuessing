@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Let's play</title>
+</head>
+
+<body>
+
+    <h1>Let's start guessing game! Please enter you name:</h1>
+
+    <form action="#">
+        <label for="playerName">Name:</label>
+        <input type="text" id="playerName" name="playerName" placeholder="Name">
+        <button onclick="enterName()">Start game</button>
+    </form>
+
+    <br>
+
+    <textarea id="textPlayerName">
+    </textarea>
+
+    <textarea id="numberOfTriesLeft">
+    </textarea>
+
+    <table id="previousMoves">
+    </table>
+
+    <input type="number" id="firstNumber" min="0" max="9" placeholder="1">
+    <input type="number" id="secondNumber" min="0" max="9" placeholder="2">
+    <input type="number" id="thirdNumber" min="0" max="9" placeholder="3">
+    <input type="number" id="fourthNumber" min="0" max="9" placeholder="4">
+    <button onclick="guess()">Guess</button>
+
+    <script>
+
+        function guess() {
+            var firstNumber = document.getElementById("firstNumber") != null ? document.getElementById("firstNumber").value : null;
+            var secondNumber = document.getElementById("secondNumber") != null ? document.getElementById("secondNumber").value : null;
+            var thirdNumber = document.getElementById("thirdNumber") != null ? document.getElementById("thirdNumber").value : null;
+            var fourthNumber = document.getElementById("fourthNumber") != null ? document.getElementById("fourthNumber").value : null;
+            var secretNumber = "" + firstNumber + secondNumber + thirdNumber + fourthNumber;
+
+            var xmlhttp = new XMLHttpRequest();
+            xmlhttp.open("POST", "http://localhost:8080/playGame/guess");
+            xmlhttp.setRequestHeader("Content-Type", "application/json");
+            xmlhttp.send(JSON.stringify({secretNumber : secretNumber}));
+
+            xmlhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    var guessResult = JSON.parse(this.responseText);
+
+                    if (guessResult.error != null) {
+                        console.log("ERRORS!!!!!!!!!!!");
+                    }
+
+                    var html = '<tr>\n' +
+                        '        <th>Secret number</th>\n' +
+                        '        <th>Result</th>\n' +
+                        '    </tr>';
+
+                        html = html + '<tr><td>' + secretNumber + '</td>\n' +
+                            '        <td>' + guessResult.result + '</td>\n' +
+                            '   </tr>';
+
+                    document.getElementById("previousMoves").innerHTML = html;
+                }
+            };
+        }
+
+
+        function enterName() {
+        var name = document.getElementById("playerName").value;
+
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.open("POST", "http://localhost:8080/playGame/enterName");
+        xmlhttp.setRequestHeader("Content-Type", "application/json");
+        xmlhttp.send(JSON.stringify(name));
+
+        xmlhttp.onreadystatechange = function () {
+          if (this.readyState == 4 && this.status == 200) {
+            var nameResponse = JSON.parse(this.responseText);
+
+            if (nameResponse.error == null) {
+                drawGame();
+            } else {
+              alert("Name can't be empty");
+            }
+          }
+        }
+      }
+
+    </script>
+
+</body>
+</html>

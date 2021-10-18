@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Let's play</title>
+  </head>
+
+  <body>
+
+    <table id="gameResultBoard">
+    </table>
+
+    <input id="nothing">
+    <button onclick="findAll()">All board</button>
+
+    <input id="get_results_with_more_than_x_played_games">
+    <button onclick="findAllWithMoreThanXGames()">Get Leader board with more than x games</button>
+
+    <button onclick="location.href = 'index.html';" class="float-left submit-button" >Menu</button>
+
+    <script>
+            function findAllWithMoreThanXGames() {
+                var count = document.getElementById("get_results_with_more_than_x_played_games").value;
+                var xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function () {
+                    if (this.readyState == 4 && this.status == 200) {
+                        var gameResults = JSON.parse(this.responseText);
+
+                        var html = '<tr>\n' +
+                            '        <th>Id</th>\n' +
+                            '        <th>Name</th>\n' +
+                            '        <th>Played games</th>\n' +
+                            '        <th>Games are win</th>\n' +
+                            '        <th>Tries</th>\n' +
+                            '        <th>Percent</th>\n' +
+                            '    </tr>';
+                        for (var i = 0; i < gameResults.length; i++) {
+                            var gameResultEntity = gameResults[i];
+                            console.log(gameResultEntity);
+                            html = html + '<tr><td>' + gameResultEntity.id + '</td>\n' +
+                                '        <td>' + gameResultEntity.name + '</td>\n' +
+                                '        <td>' + gameResultEntity.playedGames + '</td>\n' +
+                                '        <td>' + gameResultEntity.gamesAreWin + '</td>' +
+                                '        <td>' + gameResultEntity.tries + '</td>' +
+                                '        <td>' + gameResultEntity.percent + '</td>' +
+                                '   </tr>';
+                        }
+
+                        document.getElementById("gameResultBoard").innerHTML = html;
+                    }
+                };
+                xhttp.open("GET", "http://localhost:8080/gameResultEntity/findAllWithMoreThanXGames?count=" + count, true);
+                xhttp.send();
+            }
+
+            function findAll() {
+                var xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function () {
+                    if (this.readyState == 4 && this.status == 200) {
+                        var gameResults = JSON.parse(this.responseText);
+                        var html = '<tr>\n' +
+                            '        <th>Id</th>\n' +
+                            '        <th>Name</th>\n' +
+                            '        <th>Played games</th>\n' +
+                            '        <th>Games are win</th>\n' +
+                            '        <th>Tries</th>\n' +
+                            '        <th>Percent</th>\n' +
+                            '    </tr>';
+
+                        for (var i = 0; i < gameResults.length; i++) {
+                            var gameResultEntity = gameResults[i];
+                            console.log(gameResultEntity);
+                            html = html + '<tr><td>' + gameResultEntity.id + '</td>\n' +
+                                '        <td>' + gameResultEntity.name + '</td>\n' +
+                                '        <td>' + gameResultEntity.playedGames + '</td>\n' +
+                                '        <td>' + gameResultEntity.gamesAreWin + '</td>' +
+                                '        <td>' + gameResultEntity.tries + '</td>' +
+                                '        <td>' + gameResultEntity.percent + '</td>' +
+                                '   </tr>';
+                        }
+                        document.getElementById("gameResultBoard").innerHTML = html;
+                    }
+                };
+                xhttp.open("GET", "http://localhost:8080/gameResultEntity/findAll", true);
+                xhttp.send();
+            }
+      </script>
+  </body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Let's play</title>
+    </head>
+
+    <body>
+        <h1>Rules</h1>
+        <p> Program chooses a random secret number with 4 digits. <br>
+            All digits in the secret number are different. <br>
+            Player has 8 tries to guess the secret number. <br>
+            After each guess program displays the message "M:m; P:p" where: <br><br>
+
+            <b>m</b> - number of matching digits but not on the right places <br>
+            <b>p</b> - number of matching digits on exact places <br>
+
+            Game ends after 8 tries or if the correct number is guessed. <br><br>
+
+            <b>Samples:</b> <br><br>
+            Secret:  7046<br>
+            Guess:   8724<br>
+            Message: M:2; P:0<br><br>
+            Secret:  7046<br>
+            Guess:   7842<br>
+            Message: M:0; P:2<br><br>
+            Secret:  7046<br>
+            Guess:   7640<br>
+            Message: M:2; P:2
+        </p>
+
+        <button onclick="location.href = 'game.html';" class="float-left submit-button" >Start</button>
+        <button onclick="location.href = 'leaderBoard.html';" class="float-left submit-button" >Leader board</button>
+
+    </body>
+</html>
